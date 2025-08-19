@@ -32,7 +32,7 @@ export const CellAction = ({ data }: CellActionProps) => {
 
     const onCopy = (id: string) => {
         navigator.clipboard.writeText(id);
-        toast.success("Color id copied to the clipboard.");
+        toast.success("Instrument id copied to the clipboard.");
     }
 
     const onDelete = async () => {
@@ -41,10 +41,10 @@ export const CellAction = ({ data }: CellActionProps) => {
             setLoading(true);
             await axios.delete(`/api/instruments/${data.id}`);
             router.refresh();
-            toast.success("Color Deleted.");
+            toast.success("Instrument Deleted.");
 
         } catch (error) {
-            toast.error("Make sure you remove all categories using this Color first.");
+            toast.error("Make sure you remove all categories using this Instrument first.");
         } finally {
             setLoading(false);
             setOpen(false);
