@@ -1,15 +1,152 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
-  provider = "postgresql"
+  provider = "mongodb"
   url      = env("DATABASE_URL")
+}
+
+
+// ----------------- ARTIST & ALBUM -----------------
+model Artist {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  bio       String?
+  avatar    String?
+  albums    Album[]  // 1-N
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Album {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  cover     String?
+  artistId  String   @db.ObjectId
+  artist    Artist   @relation(fields: [artistId], references: [id])
+  tracks    TrackAlbum[]  // join table
+  createdAt DateTime @default(now())
+}
+
+// ----------------- TRACK -----------------
+model Track {
+  id          String       @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  url         String
+  thumbnail   String?
+  duration    String
+  bpm         Int?
+
+  // Join tables
+  moods       TrackMood[]
+  videoThemes TrackVideoTheme[]
+  instruments TrackInstrument[]
+  genres      TrackGenre[]
+  vocals      TrackVocal[]
+  albums      TrackAlbum[]
+
+  createdAt   DateTime     @default(now())
+  updatedAt   DateTime     @updatedAt
+}
+
+// ----------------- CATEGORY TABLES -----------------
+model Mood {
+  id     String      @id @default(auto()) @map("_id") @db.ObjectId
+  name   String      @unique
+  tracks TrackMood[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model VideoTheme {
+  id     String          @id @default(auto()) @map("_id") @db.ObjectId
+  name   String          @unique
+  tracks TrackVideoTheme[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Instrument {
+  id     String           @id @default(auto()) @map("_id") @db.ObjectId
+  name   String           @unique
+  tracks TrackInstrument[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Genre {
+  id     String      @id @default(auto()) @map("_id") @db.ObjectId
+  name   String      @unique
+  tracks TrackGenre[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Vocal {
+  id     String      @id @default(auto()) @map("_id") @db.ObjectId
+  name   String      @unique
+  tracks TrackVocal[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+// ----------------- EXPLICIT MANY-TO-MANY -----------------
+model TrackMood {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  trackId String @db.ObjectId
+  moodId  String @db.ObjectId
+
+  track   Track  @relation(fields: [trackId], references: [id])
+  mood    Mood   @relation(fields: [moodId], references: [id])
+}
+
+model TrackVideoTheme {
+  id           String     @id @default(auto()) @map("_id") @db.ObjectId
+  trackId      String     @db.ObjectId
+  videoThemeId String     @db.ObjectId
+
+  track        Track      @relation(fields: [trackId], references: [id])
+  videoTheme   VideoTheme @relation(fields: [videoThemeId], references: [id])
+}
+
+model TrackInstrument {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  trackId     String     @db.ObjectId
+  instrumentId String    @db.ObjectId
+
+  track       Track      @relation(fields: [trackId], references: [id])
+  instrument  Instrument @relation(fields: [instrumentId], references: [id])
+}
+
+model TrackGenre {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  trackId String @db.ObjectId
+  genreId String @db.ObjectId
+
+  track   Track @relation(fields: [trackId], references: [id])
+  genre   Genre @relation(fields: [genreId], references: [id])
+}
+
+model TrackVocal {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  trackId String @db.ObjectId
+  vocalId String @db.ObjectId
+
+  track   Track @relation(fields: [trackId], references: [id])
+  vocal   Vocal @relation(fields: [vocalId], references: [id])
+}
+
+model TrackAlbum {
+  id      String @id @default(auto()) @map("_id") @db.ObjectId
+  trackId String @db.ObjectId
+  albumId String @db.ObjectId
+
+  track   Track @relation(fields: [trackId], references: [id])
+  album   Album @relation(fields: [albumId], references: [id])
 }
