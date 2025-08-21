@@ -1,8 +1,10 @@
 'use client'
 
-import React from 'react'
-import { useForm } from 'react-hook-form'
 import { z } from 'zod'
+import React from 'react'
+import { AxiosError } from 'axios'
+import { useForm } from 'react-hook-form'
+import { useRouter } from 'next/navigation'
 import { zodResolver } from '@hookform/resolvers/zod'
 
 import { Button } from '../ui/button'
@@ -16,6 +18,7 @@ import {
   FormDescription,
   FormMessage,
 } from '../ui/form'
+import { auth, AuthResponse } from '@/lib/authClient'
 
 interface AuthFormProps {
   pageName: string
@@ -27,6 +30,7 @@ const formSchema = z.object({
 })
 
 const AuthForm = ({ pageName }: AuthFormProps) => {
+  const router = useRouter()
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -35,10 +39,50 @@ const AuthForm = ({ pageName }: AuthFormProps) => {
     },
   })
 
-  const onSubmit = (values: z.infer<typeof formSchema>) => {
-    console.log('Form submitted:', values)
-    // 🔑 handle login/signup logic here
-  }
+  const onSubmit = async (values: z.infer<typeof formSchema>) => {
+
+    const action = pageName.toLowerCase().replace(" ", "");
+
+    try {
+      let res: AuthResponse;
+
+      if (action === "signup") {
+        res = await auth.signUp(values.email, values.password) as AuthResponse;
+
+        if (!res.success) {
+          form.setError("email", { message: res.error || "Signup failed" });
+          return;
+        }
+
+        router.push("/signin");
+
+      } else if (action === "signin") {
+        res = await auth.signIn(values.email, values.password) as AuthResponse;
+
+        if (!res.success || !res.token) {
+          form.setError("password", { message: res.error || "Signin failed" });
+          return;
+        }
+
+        router.push("/");
+
+      } else {
+        form.setError("root", { message: "Unknown action. Redirecting..." });
+        router.push("/signin");
+        return;
+      }
+
+    } catch (error: unknown) {
+      if (error instanceof AxiosError) {
+        const message = error.response?.data?.error || "Authentication failed.";
+        form.setError("root", { message }); 
+      } else if (error instanceof Error) {
+        form.setError("root", { message: error.message });
+      } else {
+        form.setError("root", { message: "An unknown error occurred." });
+      }
+    }
+  };
 
   return (
     <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">

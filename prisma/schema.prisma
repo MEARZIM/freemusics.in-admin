@@ -7,6 +7,14 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// ----------------- Admin -----------------
+model Admin {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
 
 // ----------------- ARTIST & ALBUM -----------------
 model Artist {
@@ -14,29 +22,29 @@ model Artist {
   name      String
   bio       String?
   avatar    String?
-  albums    Album[]  // 1-N
+  albums    Album[] // 1-N
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
 model Album {
-  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  id        String       @id @default(auto()) @map("_id") @db.ObjectId
   name      String
   cover     String?
-  artistId  String   @db.ObjectId
-  artist    Artist   @relation(fields: [artistId], references: [id])
-  tracks    TrackAlbum[]  // join table
-  createdAt DateTime @default(now())
+  artistId  String       @db.ObjectId
+  artist    Artist       @relation(fields: [artistId], references: [id])
+  tracks    TrackAlbum[] // join table
+  createdAt DateTime     @default(now())
 }
 
 // ----------------- TRACK -----------------
 model Track {
-  id          String       @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  url         String
-  thumbnail   String?
-  duration    String
-  bpm         Int?
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  url       String
+  thumbnail String?
+  duration  String
+  bpm       Int?
 
   // Join tables
   moods       TrackMood[]
@@ -46,8 +54,8 @@ model Track {
   vocals      TrackVocal[]
   albums      TrackAlbum[]
 
-  createdAt   DateTime     @default(now())
-  updatedAt   DateTime     @updatedAt
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }
 
 // ----------------- CATEGORY TABLES -----------------
@@ -61,8 +69,8 @@ model Mood {
 }
 
 model VideoTheme {
-  id     String          @id @default(auto()) @map("_id") @db.ObjectId
-  name   String          @unique
+  id     String            @id @default(auto()) @map("_id") @db.ObjectId
+  name   String            @unique
   tracks TrackVideoTheme[]
 
   createdAt DateTime @default(now())
@@ -70,8 +78,8 @@ model VideoTheme {
 }
 
 model Instrument {
-  id     String           @id @default(auto()) @map("_id") @db.ObjectId
-  name   String           @unique
+  id     String            @id @default(auto()) @map("_id") @db.ObjectId
+  name   String            @unique
   tracks TrackInstrument[]
 
   createdAt DateTime @default(now())
@@ -79,8 +87,8 @@ model Instrument {
 }
 
 model Genre {
-  id     String      @id @default(auto()) @map("_id") @db.ObjectId
-  name   String      @unique
+  id     String       @id @default(auto()) @map("_id") @db.ObjectId
+  name   String       @unique
   tracks TrackGenre[]
 
   createdAt DateTime @default(now())
@@ -88,8 +96,8 @@ model Genre {
 }
 
 model Vocal {
-  id     String      @id @default(auto()) @map("_id") @db.ObjectId
-  name   String      @unique
+  id     String       @id @default(auto()) @map("_id") @db.ObjectId
+  name   String       @unique
   tracks TrackVocal[]
 
   createdAt DateTime @default(now())
@@ -102,26 +110,26 @@ model TrackMood {
   trackId String @db.ObjectId
   moodId  String @db.ObjectId
 
-  track   Track  @relation(fields: [trackId], references: [id])
-  mood    Mood   @relation(fields: [moodId], references: [id])
+  track Track @relation(fields: [trackId], references: [id])
+  mood  Mood  @relation(fields: [moodId], references: [id])
 }
 
 model TrackVideoTheme {
-  id           String     @id @default(auto()) @map("_id") @db.ObjectId
-  trackId      String     @db.ObjectId
-  videoThemeId String     @db.ObjectId
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  trackId      String @db.ObjectId
+  videoThemeId String @db.ObjectId
 
-  track        Track      @relation(fields: [trackId], references: [id])
-  videoTheme   VideoTheme @relation(fields: [videoThemeId], references: [id])
+  track      Track      @relation(fields: [trackId], references: [id])
+  videoTheme VideoTheme @relation(fields: [videoThemeId], references: [id])
 }
 
 model TrackInstrument {
-  id          String     @id @default(auto()) @map("_id") @db.ObjectId
-  trackId     String     @db.ObjectId
-  instrumentId String    @db.ObjectId
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  trackId      String @db.ObjectId
+  instrumentId String @db.ObjectId
 
-  track       Track      @relation(fields: [trackId], references: [id])
-  instrument  Instrument @relation(fields: [instrumentId], references: [id])
+  track      Track      @relation(fields: [trackId], references: [id])
+  instrument Instrument @relation(fields: [instrumentId], references: [id])
 }
 
 model TrackGenre {
@@ -129,8 +137,8 @@ model TrackGenre {
   trackId String @db.ObjectId
   genreId String @db.ObjectId
 
-  track   Track @relation(fields: [trackId], references: [id])
-  genre   Genre @relation(fields: [genreId], references: [id])
+  track Track @relation(fields: [trackId], references: [id])
+  genre Genre @relation(fields: [genreId], references: [id])
 }
 
 model TrackVocal {
@@ -138,8 +146,8 @@ model TrackVocal {
   trackId String @db.ObjectId
   vocalId String @db.ObjectId
 
-  track   Track @relation(fields: [trackId], references: [id])
-  vocal   Vocal @relation(fields: [vocalId], references: [id])
+  track Track @relation(fields: [trackId], references: [id])
+  vocal Vocal @relation(fields: [vocalId], references: [id])
 }
 
 model TrackAlbum {
@@ -147,6 +155,6 @@ model TrackAlbum {
   trackId String @db.ObjectId
   albumId String @db.ObjectId
 
-  track   Track @relation(fields: [trackId], references: [id])
-  album   Album @relation(fields: [albumId], references: [id])
+  track Track @relation(fields: [trackId], references: [id])
+  album Album @relation(fields: [albumId], references: [id])
 }
