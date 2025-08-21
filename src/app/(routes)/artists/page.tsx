@@ -2,18 +2,18 @@ import React from 'react'
 import { format } from 'date-fns';
 
 import { prisma } from '@/lib/prisma'
-import { VocalsClient } from './components/client'
-import { VocalsColumn } from './components/columns'
+import { ArtistsClient } from './components/client'
+import { ArtistsColumn } from './components/columns'
 
-const VocalsPage = async () => {
+const ArtistsPage = async () => {
 
-    const vocal = await prisma.vocal.findMany({
+    const artist = await prisma.artist.findMany({
         orderBy: {
             createdAt: 'desc'
         }
     })
 
-    const formattedVocals : VocalsColumn[]  = vocal.map((item) => ({
+    const formattedArtists : ArtistsColumn[]  = artist.map((item) => ({
         id: item.id,
         name: item.name,
         createdAt: format(item.createdAt, "MMMM do yyyy") 
@@ -23,11 +23,11 @@ const VocalsPage = async () => {
         <>
             <section className='flex-col'>
                 <div className='flex-1 space-y-4 p-8 pt-6'>
-                    <VocalsClient data={formattedVocals}/>
+                    <ArtistsClient data={formattedArtists}/>
                 </div>
             </section>
         </>
     )
 }
 
-export default VocalsPage
+export default ArtistsPage

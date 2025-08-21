@@ -18,6 +18,11 @@ const MainNav = ({
             active: pathName === `/`
         },
         {
+            href: `/artists`,
+            label: 'Artists',
+            active: pathName === `/artists`
+        },
+        {
             href: `/moods`,
             label: 'Moods',
             active: pathName === `/moods`
