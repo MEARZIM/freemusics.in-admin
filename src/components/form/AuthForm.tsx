@@ -48,8 +48,8 @@ const AuthForm = ({ pageName }: AuthFormProps) => {
 
       if (action === "signup") {
         res = await auth.signUp(values.email, values.password) as AuthResponse;
-
-        if (!res.success) {
+        
+        if (res.error) {
           form.setError("email", { message: res.error || "Signup failed" });
           return;
         }
@@ -69,7 +69,6 @@ const AuthForm = ({ pageName }: AuthFormProps) => {
       } else {
         form.setError("root", { message: "Unknown action. Redirecting..." });
         router.push("/signin");
-        return;
       }
 
     } catch (error: unknown) {

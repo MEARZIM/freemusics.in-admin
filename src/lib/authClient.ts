@@ -12,9 +12,19 @@ export type AuthResponse = {
 }
 
 export const auth = {
-    async signUp(email: string, password: string): Promise<AuthResponse> {
-        const response = await instance.post('/auth/signup', { email, password });
-        return response.data;
+    async signUp(email: string, password: string): Promise<AuthResponse | Error> {
+        try {
+            const response = await instance.post('/auth/signup', { email, password });
+            return response.data;
+            
+        } catch (err) {
+            const error = err as AxiosError<any>;
+
+            return {
+                success: false,
+                error: error.response?.data?.error || "Authentication failed",
+            };
+        }
     },
     async signIn(email: string, password: string): Promise<AuthResponse | Error> {
         try {
@@ -23,7 +33,7 @@ export const auth = {
                 password,
             });
 
-            console.log("SignIn Response:", response.data);
+            // console.log("SignIn Response:", response.data);
 
             if (response.data.success && response.data.token) {
                 localStorage.setItem("token", response.data.token);
