@@ -3,7 +3,7 @@ import instance from "./axios";
 
 export type AuthResponse = {
     success: boolean;
-    user?: {
+    admin?: {
         id: string;
         email: string;
     };
@@ -16,7 +16,7 @@ export const auth = {
         try {
             const response = await instance.post('/auth/signup', { email, password });
             return response.data;
-            
+
         } catch (err) {
             const error = err as AxiosError<any>;
 
@@ -35,9 +35,9 @@ export const auth = {
 
             // console.log("SignIn Response:", response.data);
 
-            if (response.data.success && response.data.token) {
-                localStorage.setItem("token", response.data.token);
-            }
+            // if (response.data.success && response.data.token) {
+            //     localStorage.setItem("token", response.data.token);
+            // }
 
             return response.data;
         } catch (err) {
@@ -51,15 +51,22 @@ export const auth = {
     },
 
     async signOut() {
-        localStorage.removeItem("token");
-        return { success: true };
+        const response = await instance.post<AuthResponse>("/auth/signout", {});
+
+        return { success: true, response: response.data };
     },
 
-    async getUser(): Promise<AuthResponse> {
+    async getUser(token: string): Promise<AuthResponse> {
         try {
-            const { data } = await instance.get("/auth/me");
-            return data;
+            if (!token) {
+                return { success: false, error: "Not authenticated" };
+            }
+            const res = await instance.post("/auth/me", { token });
+            console.log("User data fetched:", res.data);
+
+            return res.data;
         } catch (err: any) {
+            console.log("User data fetched:", err);
             return { success: false, error: "Not authenticated" };
         }
     }

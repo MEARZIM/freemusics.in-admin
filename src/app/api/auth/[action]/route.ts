@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
 import { prisma } from "@/lib/prisma"; // Adjust the import based on your project structure
+import { cookies } from "next/headers";
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 
@@ -15,24 +16,51 @@ export async function POST(req: NextRequest, {
         const { action } = await params;
         const { email, password } = await req.json();
 
-        if (!email || !password) {
-            return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
-        }
-
         if (action === "signup") {
+            if (!email || !password) {
+                return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
+            }
             const admin = await registerAdmin(email, password);
             return NextResponse.json({ success: true, admin });
         }
 
         if (action === "signin") {
+            if (!email || !password) {
+                return NextResponse.json({ error: "Email and password are required" }, { status: 400 });
+            }
             const { token, admin } = await loginAdmin(email, password);
-            return NextResponse.json({ success: true, token, admin });
+
+            const response = NextResponse.json({ success: true });
+
+
+            response.cookies.set("token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+                path: "/",
+                maxAge: 60 * 60 * 24 * 7,
+            });
+
+
+            return response;
+        }
+
+        if (action === "signout") {
+            const response = NextResponse.json({ success: true });
+            response.cookies.set("token", "", {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+            });
+            return response;
+
         }
 
     } catch (error: any) {
         return NextResponse.json({ error: error.message }, { status: 400 });
     }
 }
+
 
 
 async function registerAdmin(email: string, password: string) {
@@ -48,12 +76,12 @@ async function registerAdmin(email: string, password: string) {
 }
 
 async function loginAdmin(email: string, password: string) {
-  const admin = await prisma.admin.findUnique({ where: { email } });
-  if (!admin) throw new Error("Invalid credentials");
+    const admin = await prisma.admin.findUnique({ where: { email } });
+    if (!admin) throw new Error("Invalid credentials");
 
-  const isMatch = await bcrypt.compare(password, admin.password);
-  if (!isMatch) throw new Error("Invalid credentials");
+    const isMatch = await bcrypt.compare(password, admin.password);
+    if (!isMatch) throw new Error("Invalid credentials");
 
-  const token = jwt.sign({ adminId: admin.id }, JWT_SECRET, { expiresIn: "7d" });
-  return { token, admin: { id: admin.id, email: admin.email } };
+    const token = jwt.sign({ adminId: admin.id, email: admin.email }, JWT_SECRET, { expiresIn: "7d" });
+    return { token, admin: { id: admin.id, email: admin.email } };
 }

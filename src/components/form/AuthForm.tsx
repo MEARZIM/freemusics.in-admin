@@ -59,7 +59,7 @@ const AuthForm = ({ pageName }: AuthFormProps) => {
       } else if (action === "signin") {
         res = await auth.signIn(values.email, values.password) as AuthResponse;
 
-        if (!res.success || !res.token) {
+        if (!res.success) {
           form.setError("password", { message: res.error || "Signin failed" });
           return;
         }
