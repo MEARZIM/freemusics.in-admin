@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 
 import { VideoThemeForm } from './components/videoTheme-form';
 
-const DynamicGenrePage = async ({
+const DynamicVideoThemePage = async ({
     params
 }: {
     params: {
@@ -28,4 +28,4 @@ const DynamicGenrePage = async ({
     )
 }
 
-export default DynamicGenrePage
+export default DynamicVideoThemePage

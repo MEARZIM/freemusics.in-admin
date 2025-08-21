@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma'
 import { MoodsClient } from './components/client'
 import { MoodsColumn } from './components/columns'
 
-const GenersPage = async () => {
+const MoodsPage = async () => {
 
     const genre = await prisma.genre.findMany({
         orderBy: {
@@ -30,4 +30,4 @@ const GenersPage = async () => {
     )
 }
 
-export default GenersPage
+export default MoodsPage

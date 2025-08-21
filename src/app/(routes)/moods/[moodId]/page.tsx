@@ -3,7 +3,7 @@ import { prisma } from '@/lib/prisma';
 
 import { MoodForm } from './components/mood-form';
 
-const DynamicGenrePage = async ({
+const DynamicMoodPage = async ({
     params
 }: {
     params: {
@@ -28,4 +28,4 @@ const DynamicGenrePage = async ({
     )
 }
 
-export default DynamicGenrePage
+export default DynamicMoodPage
