@@ -29,12 +29,12 @@ export async function POST(req: Request) {
             return NextResponse.json({ error: "Invalid name" }, { status: 400 });
         }
 
-        const existingGenre = await prisma.mood.findUnique({
+        const existingMood = await prisma.mood.findUnique({
             where: { name },
         });
 
-        if (existingGenre) {
-            return NextResponse.json({ error: "Genre already exists" }, { status: 400 });
+        if (existingMood) {
+            return NextResponse.json({ error: "Mood already exists" }, { status: 400 });
         }
 
         const mood = await prisma.mood.create({

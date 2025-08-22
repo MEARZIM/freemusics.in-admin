@@ -21,7 +21,7 @@ export async function PATCH(req: Request, {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
         if (!moodId) {
-            return new NextResponse("Genre Id is required", { status: 400 });
+            return new NextResponse("Mood Id is required", { status: 400 });
         }
 
         const adminValidation = await prisma.admin.findUnique({
@@ -39,20 +39,20 @@ export async function PATCH(req: Request, {
             return NextResponse.json({ error: "Invalid name" }, { status: 400 });
         }
 
-        const existingGenre = await prisma.mood.findUnique({
+        const existingMood = await prisma.mood.findUnique({
             where: { id: moodId },
         });
 
-        if (!existingGenre) {
-            return NextResponse.json({ error: "Genre not found" }, { status: 404 });
+        if (!existingMood) {
+            return NextResponse.json({ error: "Mood not found" }, { status: 404 });
         }
 
-        const updatedGenre = await prisma.mood.update({
+        const updatedMood = await prisma.mood.update({
             where: { id: moodId },
             data: { name },
         });
 
-        return NextResponse.json(updatedGenre, { status: 200 });
+        return NextResponse.json(updatedMood, { status: 200 });
 
     } catch (error) {
         return new NextResponse("Internal Server Error", { status: 500 });
@@ -76,7 +76,7 @@ export async function DELETE(req: Request, {
             return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
         }
         if (!moodId) {
-            return new NextResponse("Genre Id is required", { status: 400 });
+            return new NextResponse("Mood Id is required", { status: 400 });
         }
 
         const adminValidation = await prisma.admin.findUnique({
@@ -87,19 +87,19 @@ export async function DELETE(req: Request, {
             return NextResponse.json({ error: "Unauthorized Admin" }, { status: 401 });
         }
 
-        const existingGenre = await prisma.mood.findUnique({
+        const existingMood = await prisma.mood.findUnique({
             where: { id: moodId },
         });
 
-        if (!existingGenre) {
-            return NextResponse.json({ error: "Genre not found" }, { status: 404 });
+        if (!existingMood) {
+            return NextResponse.json({ error: "Mood not found" }, { status: 404 });
         }
 
         await prisma.mood.delete({
             where: { id: moodId },
         });
 
-        return NextResponse.json({ message: "Genre deleted successfully" }, { status: 200 });
+        return NextResponse.json({ message: "Mood deleted successfully" }, { status: 200 });
 
     } catch (error) {
         return new NextResponse("Internal Server Error", { status: 500 });
@@ -118,7 +118,7 @@ export async function GET(req: Request, {
         const { moodId } = await params;
 
         if (!moodId) {
-            return new NextResponse("Genre Id is required", { status: 400 });
+            return new NextResponse("Mood Id is required", { status: 400 });
         }
 
         const mood = await prisma.mood.findUnique({
@@ -126,7 +126,7 @@ export async function GET(req: Request, {
         });
 
         if (!mood) {
-            return NextResponse.json({ error: "Genre not found" }, { status: 404 });
+            return NextResponse.json({ error: "Mood not found" }, { status: 404 });
         }
 
         return NextResponse.json(mood, { status: 200 });
