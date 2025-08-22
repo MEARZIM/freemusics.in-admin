@@ -2,8 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
-import { prisma } from "@/lib/prisma"; // Adjust the import based on your project structure
-import { cookies } from "next/headers";
+import { prisma } from "@/lib/prisma"; 
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 

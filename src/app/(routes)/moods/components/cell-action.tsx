@@ -1,6 +1,5 @@
 "use client"
 
-import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -17,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { MoodsColumn } from "./columns";
 import AlertModal from "@/components/modals/AlertModal";
+import instance from "@/lib/axios";
 
 
 interface CellActionProps {
@@ -39,7 +39,7 @@ export const CellAction = ({ data }: CellActionProps) => {
         try {
 
             setLoading(true);
-            await axios.delete(`/api/moods/${data.id}`);
+            await instance.delete(`/moods/${data.id}`);
             router.refresh();
             toast.success("Mood Deleted.");
 

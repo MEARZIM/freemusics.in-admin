@@ -7,13 +7,13 @@ import { MoodsColumn } from './components/columns'
 
 const MoodsPage = async () => {
 
-    const genre = await prisma.genre.findMany({
+    const mood = await prisma.mood.findMany({
         orderBy: {
             createdAt: 'desc'
         }
     })
 
-    const formattedMoods : MoodsColumn[]  = genre.map((item) => ({
+    const formattedMoods : MoodsColumn[]  = mood.map((item) => ({
         id: item.id,
         name: item.name,
         createdAt: format(item.createdAt, "MMMM do yyyy") 

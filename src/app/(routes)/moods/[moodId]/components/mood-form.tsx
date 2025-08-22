@@ -1,7 +1,6 @@
 "use client"
 
 import * as z from "zod";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Trash } from "lucide-react"
@@ -24,6 +23,7 @@ import { Button } from "@/components/ui/button"
 import Heading from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
 import AlertModal from "@/components/modals/AlertModal";
+import instance from "@/lib/axios";
 
 
 interface MoodFormProps {
@@ -65,9 +65,9 @@ export const MoodForm = ({ initialData }: MoodFormProps) => {
 
             setLoading(true);
             if (initialData) {
-                await axios.patch(`/api/moods/${params.moodId}`, data);
+                await instance.patch(`/moods/${params.moodId}`, data);
             } else {
-                await axios.post(`/api/moods`, data);
+                await instance.post(`/moods`, data);
             }
             router.push(`/moods`);
             router.refresh();
@@ -85,7 +85,7 @@ export const MoodForm = ({ initialData }: MoodFormProps) => {
         try {
 
             setLoading(true);
-            await axios.delete(`/api/moods/${params.moodId}`);
+            await instance.delete(`/moods/${params.moodId}`);
             router.push(`/moods`);
             router.refresh();
             toast.success("mood Deleted.");

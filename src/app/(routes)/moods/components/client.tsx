@@ -11,13 +11,13 @@ import { DataTable } from "@/components/ui/data-table"
 import { ApiList } from "@/components/ui/api-list"
 import { useEffect, useState } from "react"
 
-interface GenreClientProps {
+interface MoodClientProps {
     data: MoodsColumn[]
 }
 
 export const MoodsClient = ({
     data
-}: GenreClientProps) => {
+}: MoodClientProps) => {
     const parmas = useParams();
     const router = useRouter();
     const [isClient, setIsClient] = useState(false)
@@ -49,7 +49,7 @@ export const MoodsClient = ({
 
             <Heading
                 title={"API"}
-                description={"API calls for Genre."}
+                description={"API calls for Mood."}
             />
             <Separator />
             <ApiList entityName="moods" entityIdName="moodId" />
