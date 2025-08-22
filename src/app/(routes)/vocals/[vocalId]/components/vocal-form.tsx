@@ -1,7 +1,6 @@
 "use client"
 
 import * as z from "zod";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Trash } from "lucide-react"
@@ -24,6 +23,7 @@ import { Button } from "@/components/ui/button"
 import Heading from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
 import AlertModal from "@/components/modals/AlertModal";
+import instance from "@/lib/axios";
 
 
 interface VocalFormProps {
@@ -65,9 +65,9 @@ export const VocalForm = ({ initialData }: VocalFormProps) => {
 
             setLoading(true);
             if (initialData) {
-                await axios.patch(`/api/vocals/${params.vocalId}`, data);
+                await instance.patch(`/vocals/${params.vocalId}`, data);
             } else {
-                await axios.post(`/api/vocals`, data);
+                await instance.post(`/vocals`, data);
             }
             router.push(`/vocals`);
             router.refresh();
@@ -85,7 +85,7 @@ export const VocalForm = ({ initialData }: VocalFormProps) => {
         try {
 
             setLoading(true);
-            await axios.delete(`/api/vocals/${params.vocalId}`);
+            await instance.delete(`/vocals/${params.vocalId}`);
             router.push(`/vocals`);
             router.refresh();
             toast.success("vocal Deleted.");
