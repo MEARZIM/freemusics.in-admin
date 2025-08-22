@@ -3,13 +3,14 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { CellAction } from "./cell-action"
+import { Album } from "@prisma/client"
 
 export type ArtistsColumn
     = {
         id: string
         name: string
-        bio: string
-        albums: string[]
+        bio: string | null
+        albums: Album[]
         createdAt: string
     }
 

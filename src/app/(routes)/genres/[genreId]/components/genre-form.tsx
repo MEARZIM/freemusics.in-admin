@@ -1,7 +1,6 @@
 "use client"
 
 import * as z from "zod";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Trash } from "lucide-react"
@@ -24,6 +23,7 @@ import { Button } from "@/components/ui/button"
 import Heading from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
 import AlertModal from "@/components/modals/AlertModal";
+import instance from "@/lib/axios";
 
 
 interface GenreFormProps {
@@ -65,9 +65,9 @@ export const GenreForm = ({ initialData }: GenreFormProps) => {
 
             setLoading(true);
             if (initialData) {
-                await axios.patch(`/api/genres/${params.genreId}`, data);
+                await instance.patch(`/genres/${params.genreId}`, data);
             } else {
-                await axios.post(`/api/genres`, data);
+                await instance.post(`/genres`, data);
             }
             router.push(`/genres`);
             router.refresh();
@@ -85,7 +85,7 @@ export const GenreForm = ({ initialData }: GenreFormProps) => {
         try {
 
             setLoading(true);
-            await axios.delete(`/api/genres/${params.genreId}`);
+            await instance.delete(`/genres/${params.genreId}`);
             router.push(`/genres`);
             router.refresh();
             toast.success("genre Deleted.");
