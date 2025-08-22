@@ -7,13 +7,13 @@ import { VideoThemesColumn } from './components/columns'
 
 const VideoThemesPage = async () => {
 
-    const genre = await prisma.genre.findMany({
+    const videoTheme = await prisma.videoTheme.findMany({
         orderBy: {
             createdAt: 'desc'
         }
     })
 
-    const formattedVideoThemes : VideoThemesColumn[]  = genre.map((item) => ({
+    const formattedVideoThemes : VideoThemesColumn[]  = videoTheme.map((item) => ({
         id: item.id,
         name: item.name,
         createdAt: format(item.createdAt, "MMMM do yyyy") 

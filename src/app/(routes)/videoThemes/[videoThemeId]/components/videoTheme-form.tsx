@@ -1,7 +1,6 @@
 "use client"
 
 import * as z from "zod";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Trash } from "lucide-react"
@@ -24,6 +23,7 @@ import { Button } from "@/components/ui/button"
 import Heading from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
 import AlertModal from "@/components/modals/AlertModal";
+import instance from "@/lib/axios";
 
 
 interface VideoThemeFormProps {
@@ -65,9 +65,9 @@ export const VideoThemeForm = ({ initialData }: VideoThemeFormProps) => {
 
             setLoading(true);
             if (initialData) {
-                await axios.patch(`/api/videoThemes/${params.videoThemeId}`, data);
+                await instance.patch(`/videoThemes/${params.videoThemeId}`, data);
             } else {
-                await axios.post(`/api/videoThemes`, data);
+                await instance.post(`/videoThemes`, data);
             }
             router.push(`/videoThemes`);
             router.refresh();
@@ -85,7 +85,7 @@ export const VideoThemeForm = ({ initialData }: VideoThemeFormProps) => {
         try {
 
             setLoading(true);
-            await axios.delete(`/api/videoThemes/${params.VideoThemeId}`);
+            await instance.delete(`/videoThemes/${params.videoThemeId}`);
             router.push(`/videoThemes`);
             router.refresh();
             toast.success("VideoTheme Deleted.");
