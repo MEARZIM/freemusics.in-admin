@@ -1,7 +1,6 @@
 "use client"
 
 import * as z from "zod";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Trash } from "lucide-react"
@@ -24,6 +23,7 @@ import { Button } from "@/components/ui/button"
 import Heading from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
 import AlertModal from "@/components/modals/AlertModal";
+import instance from "@/lib/axios";
 
 
 interface InstrumentFormProps {
@@ -65,9 +65,9 @@ export const InstrumentForm = ({ initialData }: InstrumentFormProps) => {
 
             setLoading(true);
             if (initialData) {
-                await axios.patch(`/api/instruments/${params.instrumentId}`, data);
+                await instance.patch(`/instruments/${params.instrumentId}`, data);
             } else {
-                await axios.post(`/api/instruments`, data);
+                await instance.post(`/instruments`, data);
             }
             router.push(`/instruments`);
             router.refresh();
@@ -85,7 +85,7 @@ export const InstrumentForm = ({ initialData }: InstrumentFormProps) => {
         try {
 
             setLoading(true);
-            await axios.delete(`/api/instruments/${params.instrumentId}`);
+            await instance.delete(`/instruments/${params.instrumentId}`);
             router.push(`/instruments`);
             router.refresh();
             toast.success("instrument Deleted.");
