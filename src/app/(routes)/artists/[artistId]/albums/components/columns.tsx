@@ -3,24 +3,23 @@
 import { ColumnDef } from "@tanstack/react-table"
 
 import { CellAction } from "./cell-action"
-import { Album } from "@prisma/client"
 
-export type ArtistsColumn
+export type AlbumColumn
     = {
         id: string
         name: string
-        bio: string | null
+        cover: string | null
         createdAt: string
     }
 
-export const columns: ColumnDef<ArtistsColumn>[] = [
+export const columns: ColumnDef<AlbumColumn>[] = [
     {
         accessorKey: "name",
         header: "Name",
     },
     {
-        accessorKey: "bio",
-        header: "Bio",
+        accessorKey: "cover",
+        header: "Cover",
     },
     {
         accessorKey: "createdAt",

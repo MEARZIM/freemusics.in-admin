@@ -10,9 +10,6 @@ const ArtistsPage = async () => {
     const artist = await prisma.artist.findMany({
         orderBy: {
             createdAt: 'desc'
-        },
-        include: {
-            albums: true
         }
     })
 
@@ -20,7 +17,6 @@ const ArtistsPage = async () => {
         id: item.id,
         name: item.name,
         bio: item.bio,
-        albums: item.albums,
         createdAt: format(item.createdAt, "MMMM do yyyy") 
     }))
 

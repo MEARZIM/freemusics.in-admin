@@ -3,7 +3,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
-import { Album, Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
+import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 
 import {
     DropdownMenu,
@@ -14,13 +14,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
-import { ArtistsColumn } from "./columns";
+import { AlbumColumn } from "./columns";
 import AlertModal from "@/components/modals/AlertModal";
 import instance from "@/lib/axios";
 
 
 interface CellActionProps {
-    data: ArtistsColumn;
+    data: AlbumColumn;
 }
 
 
@@ -32,19 +32,20 @@ export const CellAction = ({ data }: CellActionProps) => {
 
     const onCopy = (id: string) => {
         navigator.clipboard.writeText(id);
-        toast.success("Vocal id copied to the clipboard.");
+        toast.success("Album id copied to the clipboard.");
     }
 
     const onDelete = async () => {
         try {
 
             setLoading(true);
-            await instance.delete(`/artists/${data.id}`);
+            // TODO: Delete all categories and products using this artistId first
+            // await instance.delete(`/artists/${data.id}`);
             router.refresh();
-            toast.success("Vocal Deleted.");
+            toast.success("Album Deleted.");
 
         } catch (error) {
-            toast.error("Make sure you remove all categories using this Vocal first.");
+            toast.error("Make sure you remove all categories using this Album first.");
         } finally {
             setLoading(false);
             setOpen(false);
@@ -80,14 +81,10 @@ export const CellAction = ({ data }: CellActionProps) => {
                         <Edit className="mr-2 h-4 w-4" />
                         Update
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push(`/artists/${data.id}/albums`)} >
-                        <Album className="mr-2 h-4 w-4" />
-                        Show Albums
-                    </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => setOpen(true)}>
+                    {/* <DropdownMenuItem onClick={() => setOpen(true)}>
                         <Trash className="mr-2 h-4 w-4" />
                         Delete
-                    </DropdownMenuItem>
+                    </DropdownMenuItem> */}
                 </DropdownMenuContent>
             </DropdownMenu>
 
