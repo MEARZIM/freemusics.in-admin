@@ -20,6 +20,8 @@ model Admin {
 model Artist {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
   name      String
+  email     String   @unique
+  password  String
   bio       String?
   avatar    String?
   albums    Album[] // 1-N

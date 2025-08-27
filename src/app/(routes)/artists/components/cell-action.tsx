@@ -1,6 +1,5 @@
 "use client"
 
-import axios from "axios";
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useRouter } from "next/navigation";
@@ -17,6 +16,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArtistsColumn } from "./columns";
 import AlertModal from "@/components/modals/AlertModal";
+import instance from "@/lib/axios";
 
 
 interface CellActionProps {
@@ -39,7 +39,7 @@ export const CellAction = ({ data }: CellActionProps) => {
         try {
 
             setLoading(true);
-            await axios.delete(`/api/artists/${data.id}`);
+            await instance.delete(`/artists/${data.id}`);
             router.refresh();
             toast.success("Vocal Deleted.");
 

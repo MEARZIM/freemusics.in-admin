@@ -1,7 +1,6 @@
 "use client"
 
 import * as z from "zod";
-import axios from "axios";
 import { useEffect, useState } from "react";
 import toast from "react-hot-toast";
 import { Trash } from "lucide-react"
@@ -24,14 +23,17 @@ import { Button } from "@/components/ui/button"
 import Heading from "@/components/ui/heading"
 import { Separator } from "@/components/ui/separator"
 import AlertModal from "@/components/modals/AlertModal";
+import instance from "@/lib/axios";
 
 
 interface ArtistsFormProps {
-    initialData: Artist | null
+    initialData: Partial<Artist | null>
 }
 
 const formSchema = z.object({
     name: z.string().min(1),
+    email: z.email().max(100, "Lenghth exceede"),
+    password: z.string().min(6, "Password must be at least 6 characters").optional().or(z.literal("")),
 })
 
 type ArtistsFormValues = z.infer<typeof formSchema>
@@ -51,12 +53,12 @@ export const ArtistsForm = ({ initialData }: ArtistsFormProps) => {
     const [isClient, setIsClient] = useState(false)
 
 
-
-
     const form = useForm<ArtistsFormValues>({
         resolver: zodResolver(formSchema),
         defaultValues: initialData || {
             name: '',
+            email: '',
+            password: ''
         }
     });
 
@@ -65,9 +67,9 @@ export const ArtistsForm = ({ initialData }: ArtistsFormProps) => {
 
             setLoading(true);
             if (initialData) {
-                await axios.patch(`/api/artists/${params.artistId}`, data);
+                await instance.patch(`/artists/${params.artistId}`, data);
             } else {
-                await axios.post(`/api/artists`, data);
+                await instance.post(`/artists`, data);
             }
             router.push(`/artists`);
             router.refresh();
@@ -85,7 +87,7 @@ export const ArtistsForm = ({ initialData }: ArtistsFormProps) => {
         try {
 
             setLoading(true);
-            await axios.delete(`/api/artists/${params.artistId}`);
+            await instance.delete(`/artists/${params.artistId}`);
             router.push(`/artists`);
             router.refresh();
             toast.success("artist Deleted.");
@@ -152,6 +154,40 @@ export const ArtistsForm = ({ initialData }: ArtistsFormProps) => {
                                 </FormItem>
                             )}
                         />
+                        <FormField
+                            control={form.control}
+                            name="email"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Email</FormLabel>
+                                    <FormControl>
+                                        <Input placeholder="Email" disabled={loading} {...field} />
+                                    </FormControl>
+                                    <FormDescription>
+                                        This is your artist email.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
+                        <FormField
+                            control={form.control}
+                            name="password"
+                            render={({ field }) => (
+                                <FormItem>
+                                    <FormLabel>Password</FormLabel>
+                                    <FormControl>
+                                        <Input type="password" placeholder="Password" disabled={loading} {...field} />
+                                    </FormControl>
+                                    <FormDescription>
+                                        Leave blank to keep the same password.
+                                    </FormDescription>
+                                    <FormMessage />
+                                </FormItem>
+                            )}
+                        />
+
 
                     </div>
                     <Button
