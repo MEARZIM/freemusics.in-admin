@@ -1,6 +1,6 @@
 import React from 'react'
 
-const SingleAlbumPage = () => {
+const SingleTrackPage = () => {
     return (
         <div className='flex items-center justify-center h-full text-2xl font-bold text-red-600'>
             Page Under Construction
@@ -8,4 +8,4 @@ const SingleAlbumPage = () => {
     )
 }
 
-export default SingleAlbumPage
+export default SingleTrackPage

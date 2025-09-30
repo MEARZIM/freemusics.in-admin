@@ -6,18 +6,18 @@ import { useParams, useRouter } from "next/navigation"
 import Heading from "@/components/ui/heading"
 import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { AlbumColumn, columns } from "./columns"
+import { TracksColumn, columns } from "./columns"
 import { DataTable } from "@/components/ui/data-table"
 import { ApiList } from "@/components/ui/api-list"
 import { useEffect, useState } from "react"
 
-interface AlbumClientProps {
-    data: AlbumColumn[]
+interface TrackClientProps {
+    data: TracksColumn[]
 }
 
-export const AlbumClient = ({
+export const TracksClient = ({
     data
-}: AlbumClientProps) => {
+}: TrackClientProps) => {
     const parmas = useParams();
     const router = useRouter();
     const [isClient, setIsClient] = useState(false)
@@ -34,15 +34,22 @@ export const AlbumClient = ({
         <>
             <div className="flex items-center justify-between">
                 <Heading
-                    title={`Album (${data.length})`}
-                    description="Manage artist albums for your store"
+                    title={`Tracks (${data.length})`}
+                    description="Manage Tracks for your store"
                 />
+                
             </div>
 
             <Separator />
             <DataTable columns={columns} data={data} searchKey="name" />
 
 
+            <Heading
+                title={"API"}
+                description={"API calls for Track."}
+            />
+            <Separator />
+            <ApiList entityName="tracks" entityIdName="trackId" />
         </>
     )
 }

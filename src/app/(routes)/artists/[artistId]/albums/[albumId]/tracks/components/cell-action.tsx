@@ -3,7 +3,7 @@
 import { useState } from "react";
 import toast from "react-hot-toast";
 import { useParams, useRouter } from "next/navigation";
-import { Copy, Edit, MoreHorizontal, Music, Trash } from "lucide-react";
+import { Copy, Edit, MoreHorizontal, Trash } from "lucide-react";
 
 import {
     DropdownMenu,
@@ -14,13 +14,13 @@ import {
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button";
-import { AlbumColumn } from "./columns";
+import { TracksColumn } from "./columns";
 import AlertModal from "@/components/modals/AlertModal";
 import instance from "@/lib/axios";
 
 
 interface CellActionProps {
-    data: AlbumColumn;
+    data: TracksColumn;
 }
 
 
@@ -33,20 +33,19 @@ export const CellAction = ({ data }: CellActionProps) => {
 
     const onCopy = (id: string) => {
         navigator.clipboard.writeText(id);
-        toast.success("Album id copied to the clipboard.");
+        toast.success("Tracks id copied to the clipboard.");
     }
 
     const onDelete = async () => {
         try {
 
             setLoading(true);
-            // TODO: Delete all categories and products using this artistId first
-            // await instance.delete(`/artists/${data.id}`);
+            await instance.delete(`/tracks/${data.id}`);
             router.refresh();
-            toast.success("Album Deleted.");
+            toast.success("Tracks Deleted.");
 
         } catch (error) {
-            toast.error("Make sure you remove all categories using this Album first.");
+            toast.error("Make sure you remove all categories using this Tracks first.");
         } finally {
             setLoading(false);
             setOpen(false);
@@ -78,18 +77,11 @@ export const CellAction = ({ data }: CellActionProps) => {
                         <Copy className="mr-2 h-4 w-4" />
                         Copy Id
                     </DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => router.push(`/artists/${params.artistId}/albums/${data.id}/tracks`)} >
-                        <Music className="mr-2 h-4 w-4" />
-                        View Songs
-                    </DropdownMenuItem>
-
-                    {/* TODO: Add Update and delete button functionality */}
-
-                    {/* <DropdownMenuItem onClick={() => router.push(`/artists/${data.id}/albums`)} >
+                    {/* <DropdownMenuItem onClick={() => router.push(`/tracks/${data.id}`)} >
                         <Edit className="mr-2 h-4 w-4" />
                         Update
-                    </DropdownMenuItem> */}
-                    {/* <DropdownMenuItem onClick={() => setOpen(true)}>
+                    </DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => setOpen(true)}>
                         <Trash className="mr-2 h-4 w-4" />
                         Delete
                     </DropdownMenuItem> */}
