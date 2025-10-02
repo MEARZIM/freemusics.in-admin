@@ -30,13 +30,16 @@ model Artist {
 }
 
 model Album {
-  id        String       @id @default(auto()) @map("_id") @db.ObjectId
-  name      String
-  cover     String?
-  artistId  String       @db.ObjectId
-  artist    Artist       @relation(fields: [artistId], references: [id])
-  tracks    TrackAlbum[] // join table
-  createdAt DateTime     @default(now())
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  cover         String?
+  mainImageUrl  String?
+  coverImageUrl String?
+  artistId      String       @db.ObjectId
+  artist        Artist       @relation(fields: [artistId], references: [id])
+  tracks        TrackAlbum[] // join table
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
 }
 
 // ----------------- TRACK -----------------

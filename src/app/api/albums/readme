@@ -1,0 +1,5 @@
+Only Artist Can Create a Album..
+
+
+
+Public Route: [GET] http://localhost:3000/api/albums   {Get All the albums}
