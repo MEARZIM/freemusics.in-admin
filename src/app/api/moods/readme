@@ -1,0 +1,5 @@
+Only admins can add new moods
+
+Route: [POST] http://localhost:3000/api/moods {For Add a new moods}
+
+Public Route: [GET] http://localhost:3000/api/moods {Get all the details of the moods}

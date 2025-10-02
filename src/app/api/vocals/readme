@@ -1,0 +1,5 @@
+Only admins can add Vocals
+
+Route: [POST] http://localhost:3000/api/vocals {For Add a new vocal}
+
+Public Route: [GET] http://localhost:3000/api/vocals {Get all the details of the vocal}

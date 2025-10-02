@@ -1,0 +1,5 @@
+Only admin can add instruments.
+
+Route: [POST] http://localhost:3000/api/instruments {For Add a new instrument}
+
+Public Route: [GET] http://localhost:3000/api/instruments {Get all the details of the instrument}

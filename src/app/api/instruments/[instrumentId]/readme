@@ -1,0 +1,7 @@
+Only Admin can alter the instrument credentials for now..
+
+Route: [PATCH] http://localhost:3000/api/instruments/{instrumentId}
+Route: [DELETE] http://localhost:3000/api/instruments/{instrumentId}
+
+
+Public Routes: [GET] http://localhost:3000/api/instruments/{instrumentId}   {Get a specific instrument details}

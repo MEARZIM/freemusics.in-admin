@@ -1,0 +1,5 @@
+Only admins can add Video Themes
+
+Route: [POST] http://localhost:3000/api/videoThemes {For Add a new vocal}
+
+Public Route: [GET] http://localhost:3000/api/videoThemes {Get all the details of the vocal}

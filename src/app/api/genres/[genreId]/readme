@@ -1,0 +1,7 @@
+Only Admin can alter the genre credentials for now..
+
+Route: [PATCH] http://localhost:3000/api/genres/{genreId}
+Route: [DELETE] http://localhost:3000/api/genres/{genreId}
+
+
+Public Routes: [GET] http://localhost:3000/api/genres/{genreId}   {Get a specific genre details}

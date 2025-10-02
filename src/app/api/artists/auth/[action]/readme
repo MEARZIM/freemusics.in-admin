@@ -1,0 +1,5 @@
+Only Artist can login using a POST request from a specific Frontend URL only..
+
+Admin Cannot Access this route...
+
+Route: [POST] http://localhost:3000/api/artists/auth/signin

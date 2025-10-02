@@ -1,0 +1,7 @@
+Only Admin can alter the vocal credentials for now..
+
+Route: [PATCH] http://localhost:3000/api/vocals/{vocalId}
+Route: [DELETE] http://localhost:3000/api/vocals/{vocalId}
+
+
+Public Routes: [GET] http://localhost:3000/api/vocals/{vocalId}   {Get a specific vocal details}

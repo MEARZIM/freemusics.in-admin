@@ -1,0 +1,5 @@
+Only admin can add genres.
+
+Route: [POST] http://localhost:3000/api/genres {For Add a new Genre}
+
+Public Route: [GET] http://localhost:3000/api/genres {Get all the details of the Genre}

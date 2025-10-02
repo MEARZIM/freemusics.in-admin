@@ -1,0 +1,5 @@
+Only admin can add new artist..
+
+Route: [POST] http://localhost:3000/api/artists {For Add a new Artist}
+
+Public Route: [GET] http://localhost:3000/api/artists {Get all the details of the Artist}

@@ -1,0 +1,7 @@
+Only admin can add new Video Themes
+
+Route: [PATCH] http://localhost:3000/api/videoThemes/{videoThemeId}
+Route: [DELETE] http://localhost:3000/api/videoThemes/{videoThemeId}
+
+
+Public Routes: [GET] http://localhost:3000/api/videoThemes/{videoThemeId}   {Get a specific videoTheme details}
