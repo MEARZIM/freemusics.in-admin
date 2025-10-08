@@ -8,6 +8,8 @@ export async function PATCH(
     { params }: { params: { albumId: string } }
 ) {
     try {
+        const { albumId } = await params;
+        // console.log("Album ID:", albumId);
 
         const cookieStore = await cookies();
         const token = cookieStore.get("token")?.value;
@@ -42,14 +44,14 @@ export async function PATCH(
 
 
 
-        if (!params.albumId) {
+        if (!albumId || albumId === "undefined") {
             return new NextResponse("Album Id is required", { status: 400 });
         }
 
 
         const album = await prisma.album.updateMany({
             where: {
-                id: params.albumId,
+                id: albumId,
             },
             data: {
                 name,
@@ -72,18 +74,25 @@ export async function GET(
     { params }: { params: { albumId: string } }
 ) {
     try {
-        if (!params.albumId) {
+        const { albumId }: { albumId: string } = await params;
+
+        if (!albumId) {
             return new NextResponse("Album Id is required", { status: 400 });
         }
         const album = await prisma.album.findUnique({
             where: {
-                id: params.albumId,
+                id: albumId,
             },
             include: {
                 tracks: true,
                 artist: true,
             }
         })
+
+        if (!album) {
+            return new NextResponse("Album not found", { status: 404 });
+        }
+
         return NextResponse.json(album, { status: 200 });
 
     } catch (error) {
@@ -97,6 +106,7 @@ export async function DELETE(
     { params }: { params: { albumId: string } }
 ) {
     try {
+        const { albumId } = await params;
 
         const cookieStore = await cookies();
         const token = cookieStore.get("token")?.value;
@@ -115,7 +125,7 @@ export async function DELETE(
             return new NextResponse("Unauthorized - Invalid Artist", { status: 401 });
         }
 
-        if (!params.albumId) {
+        if (!albumId || albumId === "undefined") {
             return new NextResponse("Album Id is required", { status: 400 });
         }
 
@@ -123,7 +133,7 @@ export async function DELETE(
         //s Find the Track IDs that are associated *only* with this album.
 
         const albumTrackAlbums = await prisma.trackAlbum.findMany({
-            where: { albumId: params.albumId },
+            where: { albumId: albumId },
             select: { trackId: true }
         });
 
@@ -146,7 +156,7 @@ export async function DELETE(
 
 
         await prisma.trackAlbum.deleteMany({
-            where: { albumId: params.albumId },
+            where: { albumId: albumId },
         });
 
 
@@ -163,7 +173,7 @@ export async function DELETE(
 
         const album = await prisma.album.deleteMany({
             where: {
-                id: params.albumId,
+                id: albumId,
                 artistId: decodedArtistId
             }
         });
