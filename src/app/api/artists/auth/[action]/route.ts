@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { NextRequest, NextResponse } from "next/server";
 
-import { prisma } from "@/lib/prisma"; 
+import { prisma } from "@/lib/prisma";
 
 const JWT_SECRET = process.env.JWT_SECRET || "supersecret";
 
@@ -32,13 +32,16 @@ export async function POST(req: NextRequest, {
             const response = NextResponse.json({ success: true });
 
 
+            const isProd = process.env.NODE_ENV === "production";
+
             response.cookies.set("token", token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "lax",
+                secure: isProd,                   // ✅ true on prod (HTTPS), false on localhost
+                sameSite: isProd ? "none" : "lax",  // ✅ switch based on environment
                 path: "/",
                 maxAge: 60 * 60 * 24 * 7,
             });
+
 
 
             return response;

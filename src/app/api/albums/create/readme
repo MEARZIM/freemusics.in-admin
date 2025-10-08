@@ -1,0 +1,8 @@
+Only a Artist can Create a Album..
+
+Cases to check for Creating a album->
+1. artist must login
+2. only a valid artist can Create album
+3. album name must be unique
+
+Route: [POST] http://localhost:3000/api/albums/create

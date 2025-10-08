@@ -1,0 +1,29 @@
+Only a Artist can Update a Album..
+
+Cases to check for Updating a album->
+1. artist must login
+2. only a valid artist can update album
+3. album name must be unique
+4. album must previously exist(it's validate through id)
+
+Route: [PATCH] http://localhost:3000/api/albums/{albumId}
+
+
+Protected Route..
+Delete any album but it will delete *all your tracks that are in the album*..
+1. Get all TrackAlbum entries for the current album.
+2. Filter the track IDs to find those that are *only* in this album.
+3. Using Loop Check how many TrackAlbum entries exist for this track.
+4. If the count is 1, it means this track is only in the album we are deleting.
+5. Delete the associated TrackAlbum entries.
+6. Delete the Tracks that were only associated with this album.
+7. Delete the Album (must be done by the owner).
+8. Check if album was actually deleted (count of 0 means not found or not owner)
+
+Route: [DELETE] http://localhost:3000/api/albums/{albumId}
+
+
+Public Route..
+Get the details of a particular album with tracks..
+
+Route: [GET] http://localhost:3000/api/albums/{albumId}
