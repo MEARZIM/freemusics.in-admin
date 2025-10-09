@@ -27,6 +27,8 @@ model Artist {
   albums    Album[] // 1-N
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  Track Track[]
 }
 
 model Album {
@@ -50,6 +52,8 @@ model Track {
   thumbnail String?
   duration  String
   bpm       Int?
+  artistId  String  @db.ObjectId
+  artist    Artist  @relation(fields: [artistId], references: [id])
 
   // Join tables
   moods       TrackMood[]
